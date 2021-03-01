@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converter="clr-namespace:Moujou.Calendar.Converters"
+             x:Class="Moujou.Calendar.CalendarView">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converter:MonthNumToStringConverter x:Key="MonthNumToStringConverter"/>
+            <converter:NumToVisibleConverter x:Key="NumToVisibleConverter"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+      <StackLayout x:Name="calendarLayout">
+            <Grid ColumnDefinitions="*,Auto,*">
+                <Button Text="Previous" Clicked="PreviousYear_Clicked"/>
+                <Label Grid.Column="1" Text="{Binding Year}" FontSize="24" HorizontalTextAlignment="Center"/>
+                <Button Grid.Column="2" Text="Next" Clicked="NextYear_Clicked"/>
+            </Grid>
+            <Label Text="{Binding Month, Converter={StaticResource MonthNumToStringConverter}}" FontSize="20" HorizontalTextAlignment="Center"/>
+            <Grid x:Name="weekGrid"/>
+            <CarouselView x:Name="cellsCarousel"/>
+      </StackLayout>
+  </ContentView.Content>
+</ContentView>
