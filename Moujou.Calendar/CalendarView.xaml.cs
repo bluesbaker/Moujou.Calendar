@@ -17,11 +17,11 @@ namespace Moujou.Calendar
     {
         #region Date BindableProperties
         public static readonly BindableProperty DayProperty =
-            BindableProperty.Create("Day", typeof(int), typeof(CalendarView), DateTime.Now.Day);
+            BindableProperty.Create("Day", typeof(int), typeof(CalendarView), DateTime.Now.Day, BindingMode.TwoWay);
         public static readonly BindableProperty MonthProperty =
-            BindableProperty.Create("Month", typeof(int), typeof(CalendarView), DateTime.Now.Month);
+            BindableProperty.Create("Month", typeof(int), typeof(CalendarView), DateTime.Now.Month, BindingMode.TwoWay);
         public static readonly BindableProperty YearProperty =
-            BindableProperty.Create("Year", typeof(int), typeof(CalendarView), DateTime.Now.Year);
+            BindableProperty.Create("Year", typeof(int), typeof(CalendarView), DateTime.Now.Year, BindingMode.TwoWay);
         public static readonly BindableProperty SelectedDateProperty =
             BindableProperty.Create("SelectedDate", typeof(DateTime), typeof(CalendarView), DateTime.Now);
 
@@ -48,7 +48,7 @@ namespace Moujou.Calendar
         #endregion
 
         readonly ObservableCollection<CalendarDay[]> Months = new ObservableCollection<CalendarDay[]>();
-        
+
         public CalendarView()
         {
             InitializeComponent();
@@ -61,6 +61,7 @@ namespace Moujou.Calendar
             GenerateCarouselItemTemplate();
             InitializeMonthCollection(Year);
             calendarLayout.BindingContext = this;
+            cellsCarousel.CurrentItem = Months.ElementAtOrDefault(Month - 1);
         }       
 
         private void GenerateCarouselItemTemplate()
@@ -93,12 +94,6 @@ namespace Moujou.Calendar
                 return cellsGrid;
             });
             cellsCarousel.ItemsSource = Months;
-            cellsCarousel.CurrentItemChanged += CellsCarousel_CurrentItemChanged;
-        }
-
-        private void CellsCarousel_CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
-        {         
-            Month = Months.IndexOf((CalendarDay[])e.CurrentItem);
         }
 
         private void GenerateWeekDays()
@@ -122,12 +117,11 @@ namespace Moujou.Calendar
 
         private void InitializeMonthCollection(int year)
         {
+            Months.Clear();
             for (int month = 1; month <= 12; month++)
             {
                 CalendarDay[] days = GetDaysOfMonth(new DateTime(year, month, 1));
                 Months.Add(days);
-                // Add default current month
-                if (month == Month) cellsCarousel.CurrentItem = days;
             }
         }
 
@@ -158,12 +152,10 @@ namespace Moujou.Calendar
 
         private void PreviousYear_Clicked(object sender, EventArgs e)
         {
-            Months.Clear();
             InitializeMonthCollection(--Year);
         }
         private void NextYear_Clicked(object sender, EventArgs e)
         {
-            Months.Clear();
             InitializeMonthCollection(++Year);
         }
     }
