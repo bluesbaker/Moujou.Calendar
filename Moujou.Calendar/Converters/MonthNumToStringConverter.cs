@@ -10,7 +10,7 @@ namespace Moujou.Calendar.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string MonthName = DateTimeFormatInfo.CurrentInfo.MonthNames[(int)value];
+            string MonthName = DateTimeFormatInfo.CurrentInfo.MonthNames[(int)value - 1];
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(MonthName);
         }
 
