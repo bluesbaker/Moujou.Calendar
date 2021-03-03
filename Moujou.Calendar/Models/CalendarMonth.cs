@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 
-namespace Moujou.Calendar
+namespace Moujou.Calendar.Models
 {
     public class CalendarMonth : INotifyPropertyChanged
     {
