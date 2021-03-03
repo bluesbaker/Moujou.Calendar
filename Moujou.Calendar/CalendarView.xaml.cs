@@ -47,7 +47,7 @@ namespace Moujou.Calendar
         }
         #endregion
 
-        readonly ObservableCollection<CalendarDay[]> Months = new ObservableCollection<CalendarDay[]>();
+        readonly ObservableCollection<CalendarMonth> Months = new ObservableCollection<CalendarMonth>();
 
         public CalendarView()
         {
@@ -61,7 +61,6 @@ namespace Moujou.Calendar
             GenerateCarouselItemTemplate();
             InitializeMonthCollection(Year);
             calendarLayout.BindingContext = this;
-            cellsCarousel.CurrentItem = Months.ElementAtOrDefault(Month - 1);
         }       
 
         private void GenerateCarouselItemTemplate()
@@ -85,8 +84,8 @@ namespace Moujou.Calendar
                         Button cellButton = new Button();
                         cellButton.SetValue(Grid.RowProperty, row);
                         cellButton.SetValue(Grid.ColumnProperty, column);
-                        cellButton.SetBinding(Button.TextProperty, $"[{countArrDays}].NumOfDay");
-                        cellButton.SetBinding(Button.IsVisibleProperty, $"[{countArrDays}].NumOfDay", BindingMode.Default, new NumToVisibleConverter());
+                        cellButton.SetBinding(Button.TextProperty, $"Days[{countArrDays}].NumOfDay");
+                        cellButton.SetBinding(Button.IsVisibleProperty, $"Days[{countArrDays}].NumOfDay", BindingMode.Default, new NumToVisibleConverter());
                         cellsGrid.Children.Add(cellButton);
                         countArrDays++;
                     }
@@ -120,8 +119,9 @@ namespace Moujou.Calendar
             Months.Clear();
             for (int month = 1; month <= 12; month++)
             {
-                CalendarDay[] days = GetDaysOfMonth(new DateTime(year, month, 1));
-                Months.Add(days);
+                CalendarMonth calendarMonth = new CalendarMonth(month) { Days = GetDaysOfMonth(new DateTime(year, month, 1)) };
+                Months.Add(calendarMonth);
+                if (Month == month) cellsCarousel.CurrentItem = calendarMonth;
             }
         }
 

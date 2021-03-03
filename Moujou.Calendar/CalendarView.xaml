@@ -16,7 +16,7 @@
                 <Label Grid.Column="1" Text="{Binding Year}" FontSize="24" HorizontalTextAlignment="Center"/>
                 <Button Grid.Column="2" Text="Next" Clicked="NextYear_Clicked"/>
             </Grid>
-            <Label Text="{Binding Month, Converter={StaticResource MonthNumToStringConverter}}" FontSize="20" HorizontalTextAlignment="Center"/>
+            <Label Text="{Binding Source={x:Reference cellsCarousel}, Path=CurrentItem.Name}" FontSize="20" HorizontalTextAlignment="Center"/>
             <Grid x:Name="weekGrid"/>
             <CarouselView x:Name="cellsCarousel"/>
       </StackLayout>
