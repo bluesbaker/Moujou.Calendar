@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Moujou.Calendar
+namespace Moujou.Calendar.Models
 {
     public class CalendarDay
     {
