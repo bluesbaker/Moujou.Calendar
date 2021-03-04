@@ -120,44 +120,28 @@ namespace Moujou.Calendar
             Months.Clear();
             for (int month = 1; month <= 12; month++)
             {
-                CalendarMonth calendarMonth = new CalendarMonth(month) { Days = GetDaysOfMonth(new DateTime(year, month, 1)) };
+                CalendarMonth calendarMonth = new CalendarMonth(month);
+                calendarMonth.InizializationDays(year);
                 Months.Add(calendarMonth);
                 if (Month == month) cellsCarousel.CurrentItem = calendarMonth;
             }
         }
 
-        private CalendarDay[] GetDaysOfMonth(DateTime date)
-        {
-            CalendarDay[] days = new CalendarDay[42];
-            DayOfWeek dayOfWeek = new DateTime(date.Year, date.Month, 1).DayOfWeek;
-            int currentIndex = 0;
-
-            // "Before" incorrect days
-            for(; currentIndex < (dayOfWeek == 0 ? 7 : (int)dayOfWeek) - 1; currentIndex++)
-                days[currentIndex] = new CalendarDay() { NumOfDay = 0 };           
-            // Correct days
-            for (int day = 1; day <= DateTime.DaysInMonth(date.Year, date.Month); day++, currentIndex++)
-            {
-                days[currentIndex] = new CalendarDay()
-                {
-                    NumOfDay = day,
-                    IsSelected = (date.Year == Year && date.Month == Month & date.Day == Day)
-                };
-            }
-            // "After" incorrect days
-            for (; currentIndex < days.Length; currentIndex++)
-                days[currentIndex] = new CalendarDay() { NumOfDay = 0 };
-
-            return days;
-        }
-
         private void PreviousYear_Clicked(object sender, EventArgs e)
         {
-            InitializeMonthCollection(--Year);
+            --Year;
+            foreach (CalendarMonth month in Months)
+            {
+                month.InizializationDays(Year);
+            }
         }
         private void NextYear_Clicked(object sender, EventArgs e)
         {
-            InitializeMonthCollection(++Year);
+            ++Year;
+            foreach (CalendarMonth month in Months)
+            {
+                month.InizializationDays(Year);
+            }
         }
     }
 }
