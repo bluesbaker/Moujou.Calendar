@@ -36,6 +36,31 @@ namespace Moujou.Calendar.Models
             _numOfMonth = num;
         }
 
+        public void InizializationDays(int year)
+        {
+            CalendarDay[] days = new CalendarDay[42];
+            DayOfWeek dayOfWeek = new DateTime(year, _numOfMonth, 1).DayOfWeek;
+            int currentIndex = 0;
+
+            // "Before" incorrect days
+            for (; currentIndex < (dayOfWeek == 0 ? 7 : (int)dayOfWeek) - 1; currentIndex++)
+                days[currentIndex] = new CalendarDay() { NumOfDay = 0 };
+            // Correct days
+            for (int day = 1; day <= DateTime.DaysInMonth(year, _numOfMonth); day++, currentIndex++)
+            {
+                days[currentIndex] = new CalendarDay()
+                {
+                    NumOfDay = day
+                };
+            }
+            // "After" incorrect days
+            for (; currentIndex < Days.Length; currentIndex++)
+                days[currentIndex] = new CalendarDay() { NumOfDay = 0 };
+
+            Days = days;
+        }
+
+        // Implementation INotifyPropwertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string prop = "")
         {
