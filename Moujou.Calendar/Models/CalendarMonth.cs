@@ -9,24 +9,33 @@ namespace Moujou.Calendar.Models
 {
     public class CalendarMonth : NPCBase
     {
-        public CalendarDay[] _days;
+        private CalendarDay[] _days;
         public CalendarDay[] Days
         {
             get => _days;
             set
             {
                 _days = value;
-                OnPropertyChanged("Days");
+                OnPropertyChanged();
             }
         }
 
-        private readonly int _numOfMonth = 0;
+        private int _numOfMonth;
+        public int NumOfMonth
+        {
+            get => _numOfMonth;
+            set
+            {
+                _numOfMonth = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string Name
         {
             get
             {
-                string MonthName = DateTimeFormatInfo.CurrentInfo.MonthNames[(int)_numOfMonth - 1];
+                string MonthName = DateTimeFormatInfo.CurrentInfo.MonthNames[(int)NumOfMonth - 1];
                 return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(MonthName);
             }
         }
@@ -34,7 +43,7 @@ namespace Moujou.Calendar.Models
         public CalendarMonth(int num)
         {
             Days = new CalendarDay[42];
-            _numOfMonth = num;
+            NumOfMonth = num;
         }
 
         public void InizializationDays(int year)
