@@ -15,7 +15,7 @@ namespace Moujou.Calendar.Models
             set
             {
                 _numOfDay = value;
-                OnPropertyChanged("NumOfDay");
+                OnPropertyChanged();
             }
         }
     }
