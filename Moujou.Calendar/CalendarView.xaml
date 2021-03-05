@@ -13,7 +13,7 @@
       <StackLayout x:Name="calendarLayout">
             <Grid ColumnDefinitions="*,Auto,*">
                 <Button Text="Previous" Clicked="PreviousYear_Clicked"/>
-                <Label Grid.Column="1" Text="{Binding Year}" FontSize="24" HorizontalTextAlignment="Center"/>
+                <Label Grid.Column="1" Text="{Binding CurrentYear}" FontSize="24" HorizontalTextAlignment="Center"/>
                 <Button Grid.Column="2" Text="Next" Clicked="NextYear_Clicked"/>
             </Grid>
             <Label Text="{Binding Source={x:Reference cellsCarousel}, Path=CurrentItem.Name}" FontSize="20" HorizontalTextAlignment="Center"/>

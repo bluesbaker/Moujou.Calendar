@@ -50,6 +50,17 @@ namespace Moujou.Calendar
 
         readonly ObservableCollection<CalendarMonth> Months = new ObservableCollection<CalendarMonth>();
 
+        private int _currentYear;
+        public int CurrentYear
+        {
+            get => _currentYear;
+            set
+            {
+                _currentYear = value;
+                OnPropertyChanged("CurrentYear");
+            }
+        }
+
         public CalendarView()
         {
             InitializeComponent();
@@ -58,9 +69,10 @@ namespace Moujou.Calendar
         protected override void OnParentSet()
         {
             base.OnParentSet();
+            CurrentYear = Year;
+            InitializeMonthCollection(CurrentYear);
             GenerateWeekDays();
             GenerateCarouselItemTemplate();
-            InitializeMonthCollection(Year);
             calendarLayout.BindingContext = this;
         }       
 
@@ -129,18 +141,18 @@ namespace Moujou.Calendar
 
         private void PreviousYear_Clicked(object sender, EventArgs e)
         {
-            --Year;
+            CurrentYear--;
             foreach (CalendarMonth month in Months)
             {
-                month.InizializationDays(Year);
+                month.InizializationDays(CurrentYear);
             }
         }
         private void NextYear_Clicked(object sender, EventArgs e)
         {
-            ++Year;
+            CurrentYear++;
             foreach (CalendarMonth month in Months)
             {
-                month.InizializationDays(Year);
+                month.InizializationDays(CurrentYear);
             }
         }
     }
