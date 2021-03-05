@@ -48,8 +48,6 @@ namespace Moujou.Calendar
         }
         #endregion
 
-        readonly ObservableCollection<CalendarMonth> Months = new ObservableCollection<CalendarMonth>();
-
         private CalendarYear _currentYear;
         public CalendarYear CurrentYear
         {
@@ -68,18 +66,22 @@ namespace Moujou.Calendar
 
         protected override void OnParentSet()
         {
-            base.OnParentSet();
-            CurrentYear = new CalendarYear() { NumOfYear = Year };
-            CurrentYear.InitializationMonths();
+            base.OnParentSet(); 
             GenerateWeekDays();
-            GenerateCarouselItemTemplate();
             calendarLayout.BindingContext = this;
+            // Data initialization
+            CurrentYear = new CalendarYear(Year);
+            CurrentYear.InitializationMonths();
+            CurrentYear.AssignmentDays();
+            cellsCarousel.ItemTemplate = CreateCalendarDataTemplate();
+            cellsCarousel.ItemsSource = CurrentYear.Months;
+            cellsCarousel.CurrentItem = CurrentYear.Months.ElementAtOrDefault(Month - 1);
+
         }       
 
-        private void GenerateCarouselItemTemplate()
+        private DataTemplate CreateCalendarDataTemplate()
         {
-            // Add template of the cells
-            cellsCarousel.ItemTemplate = new DataTemplate(() =>
+            return new DataTemplate(() =>
             {
                 // Generate cells of Grid
                 Grid cellsGrid = new Grid();
@@ -105,7 +107,6 @@ namespace Moujou.Calendar
                 }
                 return cellsGrid;
             });
-            cellsCarousel.ItemsSource = CurrentYear.Months;
         }
 
         private void GenerateWeekDays()
@@ -127,33 +128,15 @@ namespace Moujou.Calendar
             weekGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
         }
 
-        private void InitializationMonths(int year)
-        {
-            Months.Clear();
-            for (int month = 1; month <= 12; month++)
-            {
-                CalendarMonth calendarMonth = new CalendarMonth(month);
-                calendarMonth.InizializationDays(year);
-                Months.Add(calendarMonth);
-                //if (Month == month) cellsCarousel.CurrentItem = calendarMonth;
-            }
-        }
-
         private void PreviousYear_Clicked(object sender, EventArgs e)
         {
             CurrentYear.NumOfYear--;
-            foreach (CalendarMonth month in CurrentYear.Months)
-            {
-                month.InizializationDays(CurrentYear.NumOfYear);
-            }
+            CurrentYear.AssignmentDays();
         }
         private void NextYear_Clicked(object sender, EventArgs e)
         {
             CurrentYear.NumOfYear++;
-            foreach (CalendarMonth month in CurrentYear.Months)
-            {
-                month.InizializationDays(CurrentYear.NumOfYear);
-            }
+            CurrentYear.AssignmentDays();
         }
     }
 }
