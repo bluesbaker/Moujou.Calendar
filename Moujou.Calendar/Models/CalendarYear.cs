@@ -18,7 +18,7 @@ namespace Moujou.Calendar.Models
             set
             {
                 _numOfYear = value;
-                OnPropertyChanged("NumOfYear");
+                OnPropertyChanged();
             }
         }
 
@@ -33,8 +33,15 @@ namespace Moujou.Calendar.Models
             for (int month = 1; month <= 12; month++)
             {
                 CalendarMonth calendarMonth = new CalendarMonth(month);
-                calendarMonth.InizializationDays(NumOfYear);
                 Months.Add(calendarMonth);
+            }
+        }
+
+        public void AssignmentDays()
+        {
+            foreach (CalendarMonth month in Months)
+            {
+                month.InizializationDays(NumOfYear);
             }
         }
     }
