@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Moujou.Calendar.Supports;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace Moujou.Calendar.Models
 {
-    public class CalendarMonth : INotifyPropertyChanged
+    public class CalendarMonth : NPCBase
     {
         public CalendarDay[] _days;
         public CalendarDay[] Days
@@ -58,14 +59,6 @@ namespace Moujou.Calendar.Models
                 days[currentIndex] = new CalendarDay() { NumOfDay = 0 };
 
             Days = days;
-        }
-
-        // Implementation INotifyPropwertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }
