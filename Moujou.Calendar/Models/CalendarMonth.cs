@@ -40,34 +40,34 @@ namespace Moujou.Calendar.Models
             }
         }
 
-        public CalendarMonth(int num)
+        public CalendarMonth(int month)
         {
             Days = new CalendarDay[42];
-            NumOfMonth = num;
+            for (int dayIndex = 0; dayIndex < Days.Length; dayIndex++)
+            {
+                Days[dayIndex] = new CalendarDay();
+            }
+
+            NumOfMonth = month;
         }
 
-        public void InizializationDays(int year)
+        public void InitializationDays(int year)
         {
-            CalendarDay[] days = new CalendarDay[42];
-            DayOfWeek dayOfWeek = new DateTime(year, _numOfMonth, 1).DayOfWeek;
+            DayOfWeek firstDayOfWeek = new DateTime(year, _numOfMonth, 1).DayOfWeek;
+            int dayCount = DateTime.DaysInMonth(year, _numOfMonth);
             int currentIndex = 0;
 
             // "Before" incorrect days
-            for (; currentIndex < (dayOfWeek == 0 ? 7 : (int)dayOfWeek) - 1; currentIndex++)
-                days[currentIndex] = new CalendarDay() { NumOfDay = 0 };
+            for (; currentIndex < (firstDayOfWeek == 0 ? 7 : (int)firstDayOfWeek) - 1; currentIndex++)
+                Days[currentIndex].NumOfDay = 0;
             // Correct days
-            for (int day = 1; day <= DateTime.DaysInMonth(year, _numOfMonth); day++, currentIndex++)
+            for (int day = 1; day <= dayCount; day++, currentIndex++)
             {
-                days[currentIndex] = new CalendarDay()
-                {
-                    NumOfDay = day
-                };
+                Days[currentIndex].NumOfDay = day;
             }
             // "After" incorrect days
             for (; currentIndex < Days.Length; currentIndex++)
-                days[currentIndex] = new CalendarDay() { NumOfDay = 0 };
-
-            Days = days;
+                Days[currentIndex].NumOfDay = 0;
         }
     }
 }
