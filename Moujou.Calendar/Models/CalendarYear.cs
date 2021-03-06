@@ -9,7 +9,7 @@ namespace Moujou.Calendar.Models
 {
     public class CalendarYear : NPCBase
     {
-        public ObservableCollection<CalendarMonth> Months = new ObservableCollection<CalendarMonth>();
+        public ObservableCollection<CalendarMonth> Months;
 
         private int _numOfYear;
         public int NumOfYear
@@ -18,30 +18,28 @@ namespace Moujou.Calendar.Models
             set
             {
                 _numOfYear = value;
+                AssignmentDays();
                 OnPropertyChanged();
             }
         }
 
         public CalendarYear(int year)
         {
-            NumOfYear = year;
-        }
-
-        public void InitializationMonths()
-        {
-            Months.Clear();
+            Months = new ObservableCollection<CalendarMonth>();
             for (int month = 1; month <= 12; month++)
             {
                 CalendarMonth calendarMonth = new CalendarMonth(month);
                 Months.Add(calendarMonth);
             }
+
+            NumOfYear = year;
         }
 
         public void AssignmentDays()
         {
             foreach (CalendarMonth month in Months)
             {
-                month.InizializationDays(NumOfYear);
+                month.InitializationDays(NumOfYear);
             }
         }
     }
