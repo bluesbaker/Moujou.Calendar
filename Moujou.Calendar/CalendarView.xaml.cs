@@ -71,8 +71,6 @@ namespace Moujou.Calendar
             calendarLayout.BindingContext = this;
             // Data initialization
             CurrentYear = new CalendarYear(Year);
-            CurrentYear.InitializationMonths();
-            CurrentYear.AssignmentDays();
             cellsCarousel.ItemTemplate = CreateCalendarDataTemplate();
             cellsCarousel.ItemsSource = CurrentYear.Months;
             cellsCarousel.CurrentItem = CurrentYear.Months.ElementAtOrDefault(Month - 1);
@@ -91,7 +89,7 @@ namespace Moujou.Calendar
                     cellsGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
 
                 // Filling the cellsGrid with cellButtons
-                int countArrDays = 0;
+                int cellCount = 0;
                 for (int row = 0; row < cellsGrid.RowDefinitions.Count; row++)
                 {
                     for (int column = 0; column < cellsGrid.ColumnDefinitions.Count; column++)
@@ -99,10 +97,10 @@ namespace Moujou.Calendar
                         Button cellButton = new Button();
                         cellButton.SetValue(Grid.RowProperty, row);
                         cellButton.SetValue(Grid.ColumnProperty, column);
-                        cellButton.SetBinding(Button.TextProperty, $"Days[{countArrDays}].NumOfDay");
-                        cellButton.SetBinding(Button.IsVisibleProperty, $"Days[{countArrDays}].NumOfDay", BindingMode.Default, new NumToVisibleConverter());
+                        cellButton.SetBinding(Button.TextProperty, $"Days[{cellCount}].NumOfDay");
+                        cellButton.SetBinding(Button.IsVisibleProperty, $"Days[{cellCount}].NumOfDay", BindingMode.Default, new NumToVisibleConverter());
                         cellsGrid.Children.Add(cellButton);
-                        countArrDays++;
+                        cellCount++;
                     }
                 }
                 return cellsGrid;
@@ -131,12 +129,10 @@ namespace Moujou.Calendar
         private void PreviousYear_Clicked(object sender, EventArgs e)
         {
             CurrentYear.NumOfYear--;
-            CurrentYear.AssignmentDays();
         }
         private void NextYear_Clicked(object sender, EventArgs e)
         {
             CurrentYear.NumOfYear++;
-            CurrentYear.AssignmentDays();
         }
     }
 }
