@@ -71,39 +71,48 @@ namespace Moujou.Calendar
             calendarLayout.BindingContext = this;
             // Data initialization
             CurrentYear = new CalendarYear(Year);
-            cellsCarousel.ItemTemplate = CreateCalendarDataTemplate();
-            cellsCarousel.ItemsSource = CurrentYear.Months;
-            cellsCarousel.CurrentItem = CurrentYear.Months.ElementAtOrDefault(Month - 1);
-
-        }       
+            cellCarousel.ItemTemplate = CreateCalendarDataTemplate();
+            cellCarousel.ItemsSource = CurrentYear.Months;
+            cellCarousel.CurrentItem = CurrentYear.Months.ElementAtOrDefault(Month - 1);
+        }
 
         private DataTemplate CreateCalendarDataTemplate()
         {
             return new DataTemplate(() =>
             {
                 // Generate cells of Grid
-                Grid cellsGrid = new Grid();
+                Grid cellGrid = new Grid
+                {
+                    ColumnSpacing = 2,
+                    RowSpacing = 2
+                };
                 for (int row = 0; row < 6; row++)
-                    cellsGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                    cellGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
                 for (int column = 0; column < 7; column++)
-                    cellsGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
-
+                    cellGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
+                
                 // Filling the cellsGrid with cellButtons
                 int cellCount = 0;
-                for (int row = 0; row < cellsGrid.RowDefinitions.Count; row++)
+                for (int row = 0; row < cellGrid.RowDefinitions.Count; row++)
                 {
-                    for (int column = 0; column < cellsGrid.ColumnDefinitions.Count; column++)
+                    for (int column = 0; column < cellGrid.ColumnDefinitions.Count; column++)
                     {
-                        Button cellButton = new Button();
-                        cellButton.SetValue(Grid.RowProperty, row);
-                        cellButton.SetValue(Grid.ColumnProperty, column);
-                        cellButton.SetBinding(Button.TextProperty, $"Days[{cellCount}].NumOfDay");
-                        cellButton.SetBinding(Button.IsVisibleProperty, $"Days[{cellCount}].NumOfDay", BindingMode.Default, new NumToVisibleConverter());
-                        cellsGrid.Children.Add(cellButton);
+                        Label cellLabel = new Label
+                        {
+                            BackgroundColor = Color.LightGray,
+                            HorizontalTextAlignment = TextAlignment.Center,
+                            VerticalTextAlignment = TextAlignment.Center
+                        };
+                        cellLabel.SetValue(Grid.RowProperty, row);
+                        cellLabel.SetValue(Grid.ColumnProperty, column);
+                        cellLabel.SetBinding(Label.TextProperty, $"Days[{cellCount}].NumOfDay");
+                        cellLabel.SetBinding(Label.IsVisibleProperty, $"Days[{cellCount}].NumOfDay", BindingMode.Default, new NumToVisibleConverter());
+                        cellLabel.SetBinding(Label.HeightRequestProperty, new Binding(nameof(Width), source: cellLabel));
+                        cellGrid.Children.Add(cellLabel);
                         cellCount++;
                     }
                 }
-                return cellsGrid;
+                return cellGrid;
             });
         }
 

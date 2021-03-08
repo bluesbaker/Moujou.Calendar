@@ -3,12 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converter="clr-namespace:Moujou.Calendar.Converters"
              x:Class="Moujou.Calendar.CalendarView">
-    <ContentView.Resources>
-        <ResourceDictionary>
-            <converter:MonthNumToStringConverter x:Key="MonthNumToStringConverter"/>
-            <converter:NumToVisibleConverter x:Key="NumToVisibleConverter"/>
-        </ResourceDictionary>
-    </ContentView.Resources>
     <ContentView.Content>
       <StackLayout x:Name="calendarLayout">
             <Grid ColumnDefinitions="*,Auto,*">
@@ -16,9 +10,9 @@
                 <Label Grid.Column="1" Text="{Binding CurrentYear.NumOfYear}" FontSize="24" HorizontalTextAlignment="Center"/>
                 <Button Grid.Column="2" Text="Next" Clicked="NextYear_Clicked"/>
             </Grid>
-            <Label Text="{Binding Source={x:Reference cellsCarousel}, Path=CurrentItem.Name}" FontSize="20" HorizontalTextAlignment="Center"/>
+            <Label Text="{Binding Source={x:Reference cellCarousel}, Path=CurrentItem.Name}" FontSize="20" HorizontalTextAlignment="Center"/>
             <Grid x:Name="weekGrid"/>
-            <CarouselView x:Name="cellsCarousel"/>
+            <CarouselView x:Name="cellCarousel"/>
       </StackLayout>
   </ContentView.Content>
 </ContentView>
