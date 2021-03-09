@@ -97,18 +97,30 @@ namespace Moujou.Calendar
                 {
                     for (int column = 0; column < cellGrid.ColumnDefinitions.Count; column++)
                     {
+                        // Cell label
                         Label cellLabel = new Label
                         {
-                            BackgroundColor = Color.LightGray,
                             HorizontalTextAlignment = TextAlignment.Center,
-                            VerticalTextAlignment = TextAlignment.Center
+                            VerticalTextAlignment = TextAlignment.Center,
+                            // fix text aligment for Xamarin 2.3.4...
+                            HorizontalOptions = LayoutOptions.CenterAndExpand,
+                            VerticalOptions = LayoutOptions.CenterAndExpand
                         };
-                        cellLabel.SetValue(Grid.RowProperty, row);
-                        cellLabel.SetValue(Grid.ColumnProperty, column);
                         cellLabel.SetBinding(Label.TextProperty, $"Days[{cellCount}].NumOfDay");
-                        cellLabel.SetBinding(Label.IsVisibleProperty, $"Days[{cellCount}].NumOfDay", BindingMode.Default, new NumToVisibleConverter());
-                        cellLabel.SetBinding(Label.HeightRequestProperty, new Binding(nameof(Width), source: cellLabel));
-                        cellGrid.Children.Add(cellLabel);
+
+                        // Cell frame
+                        Frame cellFrame = new Frame
+                        {
+                            Padding = 0,
+                            HasShadow = false,
+                            Content = cellLabel
+                        };
+                        cellFrame.SetValue(Grid.RowProperty, row);
+                        cellFrame.SetValue(Grid.ColumnProperty, column);
+                        cellFrame.SetBinding(Frame.IsVisibleProperty, $"Days[{cellCount}].NumOfDay", BindingMode.Default, new NumToVisibleConverter());
+                        cellFrame.SetBinding(Frame.HeightRequestProperty, new Binding(nameof(Width), source: cellFrame));
+
+                        cellGrid.Children.Add(cellFrame);
                         cellCount++;
                     }
                 }
