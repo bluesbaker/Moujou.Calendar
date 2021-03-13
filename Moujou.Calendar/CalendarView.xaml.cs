@@ -55,7 +55,7 @@ namespace Moujou.Calendar
             set
             {
                 _currentYear = value;
-                OnPropertyChanged("CurrentYear");
+                OnPropertyChanged();
             }
         }
 
