@@ -66,7 +66,7 @@ namespace Moujou.Calendar
 
         protected override void OnParentSet()
         {
-            base.OnParentSet(); 
+            base.OnParentSet();
             GenerateWeekDays();
             calendarLayout.BindingContext = this;
             // Data initialization
@@ -147,13 +147,17 @@ namespace Moujou.Calendar
             weekGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
         }
 
-        private void PreviousYear_Clicked(object sender, EventArgs e)
+        private async void PreviousYear_Clicked(object sender, EventArgs e)
         {
+            await cellCarousel.FadeTo(0, 100);
             CurrentYear.NumOfYear--;
+            await cellCarousel.FadeTo(1, 100);
         }
-        private void NextYear_Clicked(object sender, EventArgs e)
+        private async void NextYear_Clicked(object sender, EventArgs e)
         {
+            await cellCarousel.FadeTo(0, 100);
             CurrentYear.NumOfYear++;
+            await cellCarousel.FadeTo(1, 100);
         }
     }
 }
