@@ -28,6 +28,17 @@ namespace Moujou.Calendar.Models
             }
         }
 
+        private int? _numOfSelectedDay;
+        public int? NumOfSelectedDay
+        {
+            get => _numOfSelectedDay;
+            set
+            {
+                _numOfSelectedDay = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string Name
         {
             get
@@ -61,6 +72,8 @@ namespace Moujou.Calendar.Models
             for (int day = 1; day <= dayCount; day++, currentIndex++)
             {
                 Days[currentIndex].NumOfDay = day;
+                if (NumOfSelectedDay == day) Days[currentIndex].IsSelected = true;
+                else Days[currentIndex].IsSelected = false;
             }
             // "After" incorrect days
             for (; currentIndex < Days.Length; currentIndex++)
