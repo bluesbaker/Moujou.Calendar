@@ -1,4 +1,5 @@
 ﻿using Moujou.Calendar.Supports;
+using System;
 using System.Collections.ObjectModel;
 
 namespace Moujou.Calendar.Models
@@ -14,13 +15,24 @@ namespace Moujou.Calendar.Models
             set
             {
                 _numOfYear = value;
-                AssignmentDays();
                 OnPropertyChanged();
             }
         }
 
-        public CalendarYear(int year)
+        private DateTime _selectedDate;
+        public DateTime SelectedDate
         {
+            get => _selectedDate;
+            set
+            {
+                _selectedDate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public CalendarYear(DateTime dateTime)
+        {
+            SelectedDate = dateTime;
             Months = new ObservableCollection<CalendarMonth>();
             for (int month = 1; month <= 12; month++)
             {
@@ -28,13 +40,15 @@ namespace Moujou.Calendar.Models
                 Months.Add(calendarMonth);
             }
 
-            NumOfYear = year;
+            NumOfYear = dateTime.Year;
         }
 
         public void AssignmentDays()
         {
             foreach (CalendarMonth month in Months)
             {
+                if (NumOfYear == SelectedDate.Year && month.NumOfMonth == SelectedDate.Month) month.NumOfSelectedDay = SelectedDate.Day;
+                else month.NumOfSelectedDay = null;
                 month.InitializationDays(NumOfYear);
             }
         }
