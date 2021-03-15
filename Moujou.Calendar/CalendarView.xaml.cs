@@ -1,4 +1,5 @@
-﻿using Moujou.Calendar.Converters;
+﻿using Moujou.Calendar.ContentViews;
+using Moujou.Calendar.Converters;
 using Moujou.Calendar.Models;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,17 @@ namespace Moujou.Calendar
         }
         #endregion
 
+        #region Style BindableProperties
+        public static readonly BindableProperty CellStyleProperty =
+            BindableProperty.Create("CellStyle", typeof(Style), typeof(CalendarView), null);
+
+        public Style CellStyle
+        {
+            get => (Style)GetValue(CellStyleProperty);
+            set => SetValue(CellStyleProperty, value);
+        }
+        #endregion
+
         private CalendarYear _currentYear;
         public CalendarYear CurrentYear
         {
@@ -69,8 +81,12 @@ namespace Moujou.Calendar
             base.OnParentSet();
             GenerateWeekDays();
             calendarLayout.BindingContext = this;
-            // Data initialization
-            CurrentYear = new CalendarYear(Year);
+
+            SelectedDate = new DateTime(Year, Month, Day);
+            // Data(date) initialization
+            CurrentYear = new CalendarYear(SelectedDate);
+            CurrentYear.AssignmentDays();
+
             cellCarousel.ItemTemplate = CreateCalendarDataTemplate();
             cellCarousel.ItemsSource = CurrentYear.Months;
             cellCarousel.CurrentItem = CurrentYear.Months.ElementAtOrDefault(Month - 1);
@@ -107,19 +123,34 @@ namespace Moujou.Calendar
                             VerticalOptions = LayoutOptions.CenterAndExpand
                         };
                         cellLabel.SetBinding(Label.TextProperty, $"Days[{cellCount}].NumOfDay");
+                        
+                        Trigger cellFrameIsSelectedTrigger = new Trigger(typeof(DayFrame))
+                        {
+                            Property = DayFrame.IsSelectedProperty,
+                            Value = true
+                        };
+                        cellFrameIsSelectedTrigger.Setters.Add(new Setter
+                        {
+                            Property = DayFrame.BackgroundColorProperty,
+                            Value = Color.Green
+                        });
 
                         // Cell frame
-                        Frame cellFrame = new Frame
+                        DayFrame cellFrame = new DayFrame
                         {
                             Padding = 0,
                             HasShadow = false,
                             Content = cellLabel
                         };
+                        cellFrame.Triggers.Add(cellFrameIsSelectedTrigger);
+                        
                         cellFrame.SetValue(Grid.RowProperty, row);
                         cellFrame.SetValue(Grid.ColumnProperty, column);
-                        cellFrame.SetBinding(Frame.IsVisibleProperty, $"Days[{cellCount}].NumOfDay", BindingMode.Default, new NumToVisibleConverter());
-                        cellFrame.SetBinding(Frame.HeightRequestProperty, new Binding(nameof(Width), source: cellFrame));
-
+                        cellFrame.SetBinding(DayFrame.IsSelectedProperty, $"Days[{cellCount}].IsSelected");
+                        cellFrame.SetBinding(DayFrame.IsVisibleProperty, $"Days[{cellCount}].NumOfDay", BindingMode.Default, new NumToVisibleConverter());
+                        cellFrame.SetBinding(DayFrame.HeightRequestProperty, new Binding(nameof(Width), source: cellFrame));
+                        
+                        //cellFrame.SetBinding(DayFrame.StyleProperty, new Binding(nameof(CellStyle), source: this));
                         cellGrid.Children.Add(cellFrame);
                         cellCount++;
                     }
@@ -151,12 +182,14 @@ namespace Moujou.Calendar
         {
             await cellCarousel.FadeTo(0, 100);
             CurrentYear.NumOfYear--;
+            CurrentYear.AssignmentDays();
             await cellCarousel.FadeTo(1, 100);
         }
         private async void NextYear_Clicked(object sender, EventArgs e)
         {
             await cellCarousel.FadeTo(0, 100);
             CurrentYear.NumOfYear++;
+            CurrentYear.AssignmentDays();
             await cellCarousel.FadeTo(1, 100);
         }
     }
