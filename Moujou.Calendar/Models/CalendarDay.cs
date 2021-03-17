@@ -4,6 +4,17 @@ namespace Moujou.Calendar.Models
 {
     public class CalendarDay : NPCBase
     {
+        private CalendarMonth _monthParent;
+        public CalendarMonth MonthParent
+        {
+            get => _monthParent;
+            set
+            {
+                _monthParent = value;
+                OnPropertyChanged();
+            }
+        }
+
         private int _numOfDay;
         public int NumOfDay
         {
