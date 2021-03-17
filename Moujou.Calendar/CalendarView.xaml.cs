@@ -81,10 +81,8 @@ namespace Moujou.Calendar
             base.OnParentSet();
             GenerateWeekDays();
             calendarLayout.BindingContext = this;
-
-            SelectedDate = new DateTime(Year, Month, Day);
             // Data(date) initialization
-            CurrentYear = new CalendarYear(SelectedDate);
+            CurrentYear = new CalendarYear(new DateTime(Year, Month, Day));
             CurrentYear.AssignmentDays();
 
             cellCarousel.ItemTemplate = CreateCalendarDataTemplate();
@@ -96,7 +94,7 @@ namespace Moujou.Calendar
         {
             return new DataTemplate(() =>
             {
-                // Generate cells of Grid
+                // Generate cell grid
                 Grid cellGrid = new Grid
                 {
                     ColumnSpacing = 2,
@@ -107,51 +105,19 @@ namespace Moujou.Calendar
                 for (int column = 0; column < 7; column++)
                     cellGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
                 
-                // Filling the cellsGrid with cellButtons
+                // Filling the cellGrid with DayCells
                 int cellCount = 0;
                 for (int row = 0; row < cellGrid.RowDefinitions.Count; row++)
                 {
                     for (int column = 0; column < cellGrid.ColumnDefinitions.Count; column++)
                     {
-                        // Cell label
-                        Label cellLabel = new Label
-                        {
-                            HorizontalTextAlignment = TextAlignment.Center,
-                            VerticalTextAlignment = TextAlignment.Center,
-                            // fix text aligment for Xamarin 2.3.4...
-                            HorizontalOptions = LayoutOptions.CenterAndExpand,
-                            VerticalOptions = LayoutOptions.CenterAndExpand
-                        };
-                        cellLabel.SetBinding(Label.TextProperty, $"Days[{cellCount}].NumOfDay");
-                        
-                        Trigger cellFrameIsSelectedTrigger = new Trigger(typeof(DayFrame))
-                        {
-                            Property = DayFrame.IsSelectedProperty,
-                            Value = true
-                        };
-                        cellFrameIsSelectedTrigger.Setters.Add(new Setter
-                        {
-                            Property = DayFrame.BackgroundColorProperty,
-                            Value = Color.Green
-                        });
+                        DayCell dayCell = new DayCell();
+                        dayCell.SetValue(Grid.RowProperty, row);
+                        dayCell.SetValue(Grid.ColumnProperty, column);
+                        dayCell.SetBinding(DayCell.DayProperty, $"Days[{cellCount}]");
 
-                        // Cell frame
-                        DayFrame cellFrame = new DayFrame
-                        {
-                            Padding = 0,
-                            HasShadow = false,
-                            Content = cellLabel
-                        };
-                        cellFrame.Triggers.Add(cellFrameIsSelectedTrigger);
-                        
-                        cellFrame.SetValue(Grid.RowProperty, row);
-                        cellFrame.SetValue(Grid.ColumnProperty, column);
-                        cellFrame.SetBinding(DayFrame.IsSelectedProperty, $"Days[{cellCount}].IsSelected");
-                        cellFrame.SetBinding(DayFrame.IsVisibleProperty, $"Days[{cellCount}].NumOfDay", BindingMode.Default, new NumToVisibleConverter());
-                        cellFrame.SetBinding(DayFrame.HeightRequestProperty, new Binding(nameof(Width), source: cellFrame));
-                        
                         //cellFrame.SetBinding(DayFrame.StyleProperty, new Binding(nameof(CellStyle), source: this));
-                        cellGrid.Children.Add(cellFrame);
+                        cellGrid.Children.Add(dayCell);
                         cellCount++;
                     }
                 }
