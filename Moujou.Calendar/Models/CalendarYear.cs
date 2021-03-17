@@ -27,19 +27,22 @@ namespace Moujou.Calendar.Models
             {
                 _selectedDate = value;
                 OnPropertyChanged();
+                ChangeSelectedDay();
             }
         }
 
         public CalendarYear(DateTime dateTime)
         {
-            SelectedDate = dateTime;
             Months = new ObservableCollection<CalendarMonth>();
             for (int month = 1; month <= 12; month++)
             {
-                CalendarMonth calendarMonth = new CalendarMonth(month);
+                CalendarMonth calendarMonth = new CalendarMonth(month)
+                {
+                    YearParent = this
+                };
                 Months.Add(calendarMonth);
             }
-
+            SelectedDate = dateTime;
             NumOfYear = dateTime.Year;
         }
 
@@ -47,9 +50,22 @@ namespace Moujou.Calendar.Models
         {
             foreach (CalendarMonth month in Months)
             {
-                if (NumOfYear == SelectedDate.Year && month.NumOfMonth == SelectedDate.Month) month.NumOfSelectedDay = SelectedDate.Day;
-                else month.NumOfSelectedDay = null;
-                month.InitializationDays(NumOfYear);
+                month.InitializationDays();
+            }
+            ChangeSelectedDay();
+        }
+
+        private void ChangeSelectedDay()
+        {
+            foreach(var month in Months)
+            {
+                foreach(var day in month.Days)
+                {
+                    if (SelectedDate.Year == this.NumOfYear && SelectedDate.Month == month.NumOfMonth && SelectedDate.Day == day.NumOfDay)
+                        day.IsSelected = true;
+                    else
+                        day.IsSelected = false;
+                }
             }
         }
     }
