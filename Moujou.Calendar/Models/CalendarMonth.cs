@@ -6,6 +6,17 @@ namespace Moujou.Calendar.Models
 {
     public class CalendarMonth : NPCBase
     {
+        private CalendarYear _yearParent;
+        public CalendarYear YearParent
+        {
+            get => _yearParent;
+            set
+            {
+                _yearParent = value;
+                OnPropertyChanged();
+            }
+        }
+
         private CalendarDay[] _days;
         public CalendarDay[] Days
         {
@@ -28,17 +39,6 @@ namespace Moujou.Calendar.Models
             }
         }
 
-        private int? _numOfSelectedDay;
-        public int? NumOfSelectedDay
-        {
-            get => _numOfSelectedDay;
-            set
-            {
-                _numOfSelectedDay = value;
-                OnPropertyChanged();
-            }
-        }
-
         public string Name
         {
             get
@@ -50,19 +50,21 @@ namespace Moujou.Calendar.Models
 
         public CalendarMonth(int month)
         {
+            NumOfMonth = month;
             Days = new CalendarDay[42];
             for (int dayIndex = 0; dayIndex < Days.Length; dayIndex++)
             {
-                Days[dayIndex] = new CalendarDay();
+                Days[dayIndex] = new CalendarDay
+                {
+                    MonthParent = this
+                };
             }
-
-            NumOfMonth = month;
         }
 
-        public void InitializationDays(int year)
+        public void InitializationDays()
         {
-            DayOfWeek firstDayOfWeek = new DateTime(year, _numOfMonth, 1).DayOfWeek;
-            int dayCount = DateTime.DaysInMonth(year, _numOfMonth);
+            DayOfWeek firstDayOfWeek = new DateTime(YearParent.NumOfYear, NumOfMonth, 1).DayOfWeek;
+            int dayCount = DateTime.DaysInMonth(YearParent.NumOfYear, NumOfMonth);
             int currentIndex = 0;
 
             // "Before" incorrect days
@@ -72,8 +74,6 @@ namespace Moujou.Calendar.Models
             for (int day = 1; day <= dayCount; day++, currentIndex++)
             {
                 Days[currentIndex].NumOfDay = day;
-                if (NumOfSelectedDay == day) Days[currentIndex].IsSelected = true;
-                else Days[currentIndex].IsSelected = false;
             }
             // "After" incorrect days
             for (; currentIndex < Days.Length; currentIndex++)
