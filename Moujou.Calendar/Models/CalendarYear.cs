@@ -31,6 +31,17 @@ namespace Moujou.Calendar.Models
             }
         }
 
+        private CalendarDay _selectedDay;
+        public CalendarDay SelectedDay
+        {
+            get => _selectedDay;
+            set
+            {
+                _selectedDay = value;
+                OnPropertyChanged();
+            }
+        }
+
         public CalendarYear(DateTime dateTime)
         {
             Months = new ObservableCollection<CalendarMonth>();
