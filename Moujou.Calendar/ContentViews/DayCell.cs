@@ -73,8 +73,6 @@ namespace Moujou.Calendar.ContentViews
             });
             #endregion
 
-            this.Padding = 0;
-            this.HasShadow = false;
             this.Content = cellLabel;
             this.Triggers.Add(selectedTrigger);
             this.Triggers.Add(hasEventTrigger);
