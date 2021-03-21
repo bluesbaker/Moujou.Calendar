@@ -7,13 +7,13 @@ namespace Moujou.Calendar.Models
 {
     public class CalendarDate : NPCBase
     {
-        private CalendarYear _calendarYear;
-        public CalendarYear CalendarYear
+        private CalendarYear _year;
+        public CalendarYear Year
         {
-            get => _calendarYear;
+            get => _year;
             set
             {
-                _calendarYear = value;
+                _year = value;
                 OnPropertyChanged();
             }
         }
