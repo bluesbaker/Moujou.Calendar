@@ -4,13 +4,13 @@ namespace Moujou.Calendar.Models
 {
     public class CalendarDay : NPCBase
     {
-        private CalendarMonth _monthParent;
-        public CalendarMonth MonthParent
+        private CalendarMonth _month;
+        public CalendarMonth Month
         {
-            get => _monthParent;
+            get => _month;
             set
             {
-                _monthParent = value;
+                _month = value;
                 OnPropertyChanged();
             }
         }
