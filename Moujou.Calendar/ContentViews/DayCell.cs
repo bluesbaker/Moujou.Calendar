@@ -84,8 +84,8 @@ namespace Moujou.Calendar.ContentViews
             {
                 Command = new Command(p =>
                 {
-                    Day.MonthParent.YearParent.SelectedDate = 
-                        new DateTime(Day.MonthParent.YearParent.NumOfYear, Day.MonthParent.NumOfMonth, Day.NumOfDay);
+                    Day.Month.Year.SelectedDate = 
+                        new DateTime(Day.Month.Year.NumOfYear, Day.Month.NumOfMonth, Day.NumOfDay);
                 })
             });
         }
