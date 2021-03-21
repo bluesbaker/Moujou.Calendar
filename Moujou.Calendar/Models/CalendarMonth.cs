@@ -6,13 +6,13 @@ namespace Moujou.Calendar.Models
 {
     public class CalendarMonth : NPCBase
     {
-        private CalendarYear _yearParent;
-        public CalendarYear YearParent
+        private CalendarYear _year;
+        public CalendarYear Year
         {
-            get => _yearParent;
+            get => _year;
             set
             {
-                _yearParent = value;
+                _year = value;
                 OnPropertyChanged();
             }
         }
@@ -56,15 +56,15 @@ namespace Moujou.Calendar.Models
             {
                 Days[dayIndex] = new CalendarDay
                 {
-                    MonthParent = this
+                    Month = this
                 };
             }
         }
 
         public void InitializationDays()
         {
-            DayOfWeek firstDayOfWeek = new DateTime(YearParent.NumOfYear, NumOfMonth, 1).DayOfWeek;
-            int dayCount = DateTime.DaysInMonth(YearParent.NumOfYear, NumOfMonth);
+            DayOfWeek firstDayOfWeek = new DateTime(Year.NumOfYear, NumOfMonth, 1).DayOfWeek;
+            int dayCount = DateTime.DaysInMonth(Year.NumOfYear, NumOfMonth);
             int currentIndex = 0;
 
             // "Before" incorrect days
