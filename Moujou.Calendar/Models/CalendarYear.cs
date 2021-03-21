@@ -49,7 +49,7 @@ namespace Moujou.Calendar.Models
             {
                 CalendarMonth calendarMonth = new CalendarMonth(month)
                 {
-                    YearParent = this
+                    Year = this
                 };
                 Months.Add(calendarMonth);
             }
