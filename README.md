@@ -1,5 +1,5 @@
 # Moujou.Calendar
-the CalendarView controller for UI Xamarin.forms
+The Calendar controller for the UI Xamarin.forms
 ### Installation
  > Clone repository and have fun
 
