@@ -1,14 +1,8 @@
 ﻿using Moujou.Calendar.ContentViews;
-using Moujou.Calendar.Converters;
 using Moujou.Calendar.Models;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
