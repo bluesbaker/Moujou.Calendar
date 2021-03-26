@@ -1,8 +1,6 @@
 ﻿using Moujou.Calendar.Converters;
 using Moujou.Calendar.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace Moujou.Calendar.ContentViews
