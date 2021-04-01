@@ -72,7 +72,7 @@ namespace Moujou.Calendar.Models
             {
                 foreach(var day in month.Days)
                 {
-                    if (SelectedDate.Year == this.NumOfYear && SelectedDate.Month == month.NumOfMonth && SelectedDate.Day == day.NumOfDay)
+                    if (SelectedDate == new DateTime(this.NumOfYear, month.NumOfMonth, day.NumOfDay))
                         day.IsSelected = true;
                     else
                         day.IsSelected = false;
