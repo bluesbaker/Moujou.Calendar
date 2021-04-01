@@ -72,9 +72,7 @@ namespace Moujou.Calendar.Models
                 Days[currentIndex].NumOfDay = 0;
             // Correct days
             for (int day = 1; day <= dayCount; day++, currentIndex++)
-            {
                 Days[currentIndex].NumOfDay = day;
-            }
             // "After" incorrect days
             for (; currentIndex < Days.Length; currentIndex++)
                 Days[currentIndex].NumOfDay = 0;
