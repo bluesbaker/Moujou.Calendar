@@ -6,9 +6,11 @@ The Calendar view for the UI Xamarin.forms
 ### Usage
 Add in header
 ```xml
+<
 ...
 xmlns:moujou="clr-namespace:Moujou.Calendar;assembly=Moujou.Calendar"
 ...
+>
 ```
 ...and...
 ```xml
