@@ -75,7 +75,7 @@ namespace Moujou.Calendar
             base.OnParentSet();
             GenerateWeekDays();
             calendarLayout.BindingContext = this;
-            // Data(date) initialization
+            // Data(dates) initialization
             CurrentYear = new CalendarYear(new DateTime(Year, Month, Day));
             CurrentYear.AssignmentDays();
 
