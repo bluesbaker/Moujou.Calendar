@@ -1,6 +1,6 @@
 # Moujou.Calendar
 The Calendar view for the UI Xamarin.forms
-### Install
+### Installation
 ```Clone repository and have fun```
 
 ### Usage
